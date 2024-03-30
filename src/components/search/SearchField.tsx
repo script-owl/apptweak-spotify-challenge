@@ -1,8 +1,12 @@
+import React, { FC, ReactElement } from "react";
+
 interface Props {
-  handler: (value: string) => void;
+  changeHandler: (value: string) => void;
+  buttonHandler: () => void;
 }
 
-export default function SearchField({ handler }: Props) {
+const SearchField: FC<Props> = ({ changeHandler, buttonHandler }: Props): ReactElement => {
+  
   return (
     <div>
       <div className="relative flex items-center w-full h-12 rounded-lg border border-slate-700 focus-within:shadow-lg bg-white overflow-hidden">
@@ -28,9 +32,14 @@ export default function SearchField({ handler }: Props) {
           type="text"
           id="search"
           placeholder="Search something.."
-          onChange={(e) => handler(e.currentTarget.value)}
+          onChange={(e) => changeHandler(e.currentTarget.value)}
         />
       </div>
+      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" onClick={() => buttonHandler()}>
+        Button
+      </button>
     </div>
   );
 }
+
+export default SearchField

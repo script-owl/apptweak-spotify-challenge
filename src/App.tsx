@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { authSelectors } from "./containers/auth/selectors";
 import Search from "./components/search";
+import { getTracks } from "./containers/tracks/slice";
 
 const App: FC = (): ReactElement => {
   const dispatch = useDispatch();
