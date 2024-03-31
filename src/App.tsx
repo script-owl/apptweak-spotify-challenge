@@ -1,31 +1,19 @@
-import React, { FC, ReactElement, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { FC, ReactElement } from "react";
 
-import { authSelectors } from "./containers/auth/selectors";
 import Search from "./components/search";
-import { getTracks } from "./containers/tracks/slice";
+import PlaylistAddButton from "./components/playlistaddbutton";
 
 const App: FC = (): ReactElement => {
-  const dispatch = useDispatch();
-  const user = useSelector(authSelectors.getUser);
-
-  // TODO: You can access user data and now fetch user's playlists
-  console.log(user);
-
   return (
-    <div>
+    <div className="flex justify-center space-x-4">
       <div>
-        Header
         <Search />
-        <div>NewPlaylistButton</div>
       </div>
 
       <div>
-        Body
-        
+        <PlaylistAddButton />
         <div>PlaylistSelect</div>
         <div>SelectedPlaylistDescription</div>
-
         <div>PlaylistTracks</div>
       </div>
     </div>
