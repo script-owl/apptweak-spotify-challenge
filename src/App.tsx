@@ -2,40 +2,22 @@ import { FC, ReactElement } from "react";
 
 import Search from "./components/search";
 import PlaylistAddButton from "./components/playlistaddbutton";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "./store/store";
-import { getPlaylists } from "./containers/playlists/slice";
+import PlaylistManager from "./components/playlistmanager";
 
 const App: FC = (): ReactElement => {
 
-  const dispatch = useDispatch();
-  
-  const { list, status, error } = useSelector(
-    (state: RootState) => state.playlists
-  );
-
-  function click() {
-
-    dispatch(getPlaylists())
-  
-    console.log(list)
-  }
-
-
   return (
-    <div className="flex justify-center space-x-4">
-      <div>
-        <Search />
+    <div className="m-auto max-w-md py-2 space-y-20">
+      <div className="flex justify-center space-x-4 ">
+        <div>
+          <Search />
+        </div>
+        <div>
+          <PlaylistAddButton />
+        </div>
       </div>
 
-      <button onClick={() => click()}> CLICK</button>
-
-      <div>
-        <PlaylistAddButton />
-        <div>PlaylistSelect</div>
-        <div>SelectedPlaylistDescription</div>
-        <div>PlaylistTracks</div>
-      </div>
+      <PlaylistManager />
     </div>
   );
 };

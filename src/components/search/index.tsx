@@ -8,6 +8,7 @@ import { getTracks } from "../../containers/tracks/slice";
 
 const Search: FC = (): ReactElement => {
   const [search, setSearch] = useState("");
+  const [isHovered, setIsHovered] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -20,12 +21,17 @@ const Search: FC = (): ReactElement => {
   }
 
   return (
-    <div className="max-w-md mx-auto my-2 space-y-4">
+    <div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <SearchField
         changeHandler={handleSearchChange}
         buttonHandler={handleSearchButton}
       />
-      <SearchResults query={search} />
+      <div style={{ display: isHovered ? "block" : "none" }}>
+        <SearchResults/>
+      </div>
     </div>
   );
 };
