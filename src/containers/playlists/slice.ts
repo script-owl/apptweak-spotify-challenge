@@ -1,6 +1,5 @@
 import { PayloadAction, createAction, createSlice } from "@reduxjs/toolkit";
 import { ErrorPayload, RequestStatus } from "../../types/requests";
-import { TrackList } from "../tracks/slice";
 
 export const getPlaylists = createAction("tracks/getPlaylists");
 export const getPlaylistsSuccess = createAction<PlaylistList>(
@@ -13,7 +12,7 @@ export const getPlaylistsFailed = createAction<ErrorPayload>(
 export interface Playlist {
   id: string;
   name: string;
-  items: TrackList;
+  tracks: { href: string; total: number };
 }
 
 export interface PlaylistList {

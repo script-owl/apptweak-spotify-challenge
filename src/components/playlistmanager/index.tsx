@@ -59,7 +59,11 @@ const PlaylistManager: FC = (): ReactElement => {
         </div>
       </div>
       <div>
-        <div>PlaylistTracks</div>
+          {selectedPlaylist ? (
+            <div> {selectedPlaylist.tracks.href}</div>
+          ) : (
+            <div>No playlist selected</div>
+          )}
       </div>
     </div>
   );

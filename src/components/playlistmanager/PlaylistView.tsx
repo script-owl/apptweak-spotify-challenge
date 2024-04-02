@@ -1,12 +1,12 @@
 import { FC, ReactElement } from "react";
-import { Playlist as PlaylistType } from "../../containers/playlists/slice";
+import { Playlist } from "../../containers/playlists/slice";
 
 interface Props {
-  playlist: PlaylistType;
-  handler: (playlist: PlaylistType) => void;
+  playlist: Playlist;
+  handler: (playlist: Playlist) => void;
 }
 
-const Playlist: FC<Props> = ({ playlist, handler }: Props): ReactElement => {
+const PlaylistView: FC<Props> = ({ playlist, handler }: Props): ReactElement => {
   return (
     <div className="flex justify-between border rounded border-slate-800 bg-indigo-200 px-1 mb-1">
       <div>{playlist.name}</div>
@@ -15,4 +15,4 @@ const Playlist: FC<Props> = ({ playlist, handler }: Props): ReactElement => {
   );
 };
 
-export default Playlist;
+export default PlaylistView;
