@@ -17,7 +17,7 @@ const PlaylistAddButton: FC = (): ReactElement => {
 
       {show && (
         <div className="absolute w-full max-w-xs">
-          <PlaylistAddForm setShow={setShow}/>
+          <PlaylistAddForm/>
         </div>
       )}
     </div>

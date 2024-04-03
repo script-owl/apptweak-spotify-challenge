@@ -1,13 +1,9 @@
 import { FC, ReactElement, useState } from "react";
 
 // Define props interface
-interface PlaylistAddFormProps {
-  setShow: React.Dispatch<React.SetStateAction<boolean>>;
-}
+interface PlaylistAddFormProps {}
 
-const PlaylistAddForm: FC<PlaylistAddFormProps> = ({
-  setShow,
-}): ReactElement => {
+const PlaylistAddForm: FC<PlaylistAddFormProps> = ({}): ReactElement => {
   const [playlistName, setPlaylistName] = useState("");
   const [description, setDescription] = useState("");
   const [isPublic, setIsPublic] = useState(true);
@@ -25,7 +21,6 @@ const PlaylistAddForm: FC<PlaylistAddFormProps> = ({
     setDescription("");
     setIsPublic(true);
     setIsCollaborative(false);
-    setShow(false); // Assuming you want to hide the form after submission
   };
 
   return (
