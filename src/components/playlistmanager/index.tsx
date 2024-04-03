@@ -4,6 +4,8 @@ import { RootState } from "../../store/store";
 import { getPlaylists } from "../../containers/playlists/slice";
 import PlaylistSelect from "./PlaylistSelect";
 import { Playlist } from "../../containers/playlists/slice";
+import { getTracksFromPlaylist } from "../../containers/tracks/slice";
+import PlaylistTracks from "./PlaylistTracks";
 
 const PlaylistManager: FC = (): ReactElement => {
   const [selectedPlaylist, setSelectedPlaylist] = useState<
@@ -18,6 +20,7 @@ const PlaylistManager: FC = (): ReactElement => {
 
   function selectPlaylistHandler(playlist: Playlist) {
     setSelectedPlaylist(playlist);
+    dispatch(getTracksFromPlaylist(playlist.id));
   }
 
   function click() {
@@ -26,7 +29,7 @@ const PlaylistManager: FC = (): ReactElement => {
   }
 
   return (
-    <div className="flex space-x-6 justify-center">
+    <div className="flex space-x-6">
       <div className="space-y-4">
         <button
           className="rounded-lg border border-slate-700 bg-blue-500 hover:bg-blue-700 text-white font-bold p-3 flex items-center" // Add flex and items-center classes to align icon and text
@@ -50,21 +53,8 @@ const PlaylistManager: FC = (): ReactElement => {
             <div> No playlists loaded </div>
           )}
         </div>
-        <div>
-          {selectedPlaylist ? (
-            <div> {selectedPlaylist.name}</div>
-          ) : (
-            <div>No playlist selected</div>
-          )}
-        </div>
       </div>
-      <div>
-          {selectedPlaylist ? (
-            <div> {selectedPlaylist.tracks.href}</div>
-          ) : (
-            <div>No playlist selected</div>
-          )}
-      </div>
+      <PlaylistTracks playlist={selectedPlaylist} />
     </div>
   );
 };

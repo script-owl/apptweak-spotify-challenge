@@ -1,12 +1,14 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { FC, ReactElement } from "react";
-import Track from "./Track";
+import TrackView from "./TrackView";
 
 const SearchResults: FC = (): ReactElement => {
-  const { list, status, error } = useSelector(
-    (state: RootState) => state.tracks
-  );
+  const {
+    searchTrackList: list,
+    status,
+    error,
+  } = useSelector((state: RootState) => state.tracks);
 
   return (
     <div>
@@ -15,8 +17,12 @@ const SearchResults: FC = (): ReactElement => {
           <div className="border rounded bg-red-300 p-1 px-2">
             Invalid search
           </div>
+        ) : status == "pending" ? (
+          <div>Loading tracks...</div>
         ) : list ? (
-          list.tracks.map((item) => <Track key={item.id} track={item}></Track>)
+          list.tracks.map((item) => (
+            <TrackView key={item.id} track={item}></TrackView>
+          ))
         ) : (
           <div className="border rounded bg-blue-300 p-1 px-2">
             No current search
