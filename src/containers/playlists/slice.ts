@@ -1,13 +1,30 @@
 import { PayloadAction, createAction, createSlice } from "@reduxjs/toolkit";
 import { ErrorPayload, RequestStatus } from "../../types/requests";
 
-export const getPlaylists = createAction("tracks/getPlaylists");
+export const getPlaylists = createAction("playlists/getPlaylists");
 export const getPlaylistsSuccess = createAction<PlaylistList>(
-  "tracks/getPlaylistsSuccess"
+  "playlists/getPlaylistsSuccess"
 );
 export const getPlaylistsFailed = createAction<ErrorPayload>(
-  "tracks/getPlaylistsFailed"
+  "playlists/getPlaylistsFailed"
 );
+
+export const createPlaylist = createAction<NewPlaylist>(
+  "playlists/createPlaylist"
+);
+export const createPlaylistSuccess = createAction(
+  "playlists/createPlaylistSuccess"
+);
+export const createPlaylistFailed = createAction<ErrorPayload>(
+  "playlists/createPlaylistFailed"
+);
+
+export interface NewPlaylist {
+  name: string;
+  description: string;
+  collaborative: boolean;
+  public: boolean;
+}
 
 export interface Playlist {
   id: string;
@@ -23,10 +40,13 @@ export interface PlaylistsState {
   list?: PlaylistList;
   status: RequestStatus;
   error?: string;
+  creationStatus: RequestStatus;
+  creationError?: string;
 }
 
 const initialState: PlaylistsState = {
   status: RequestStatus.IDLE,
+  creationStatus: RequestStatus.IDLE,
 };
 
 const playlistsSlice = createSlice({
@@ -42,7 +62,7 @@ const playlistsSlice = createSlice({
         getPlaylistsSuccess,
         (state, action: PayloadAction<PlaylistList>) => {
           state.status = RequestStatus.SUCCESS;
-          state.list = action.payload;
+          state.list = action.payload
         }
       )
       .addCase(
@@ -50,6 +70,19 @@ const playlistsSlice = createSlice({
         (state, action: PayloadAction<ErrorPayload>) => {
           state.status = RequestStatus.ERROR;
           state.error = action.payload.message;
+        }
+      )
+      .addCase(createPlaylist, (state) => {
+        state.creationStatus = RequestStatus.PENDING;
+      })
+      .addCase(createPlaylistSuccess, (state) => {
+        state.creationStatus = RequestStatus.SUCCESS;
+      })
+      .addCase(
+        createPlaylistFailed,
+        (state, action: PayloadAction<ErrorPayload>) => {
+          state.creationStatus = RequestStatus.ERROR;
+          state.creationError = action.payload.message;
         }
       );
   },

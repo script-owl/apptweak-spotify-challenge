@@ -1,9 +1,16 @@
 import axios from "axios";
 
 import { call, put, select, takeEvery } from "redux-saga/effects";
-import { getPlaylists, getPlaylistsSuccess } from "./slice";
+import {
+  getPlaylists,
+  getPlaylistsSuccess,
+  getPlaylistsFailed,
+  createPlaylist,
+  createPlaylistFailed,
+  createPlaylistSuccess,
+} from "./slice";
 import { authSelectors } from "../auth/selectors";
-import { getTracksFailed } from "../tracks/slice";
+import { User } from "../auth/slice";
 
 function* getPlaylistsFromCurrentUser() {
   try {
@@ -21,10 +28,29 @@ function* getPlaylistsFromCurrentUser() {
       })
     );
   } catch (error: any) {
-    yield put(getTracksFailed({ message: error.message }));
+    yield put(getPlaylistsFailed({ message: error.message }));
+  }
+}
+
+function* createNewPlaylist(action: ReturnType<typeof createPlaylist>) {
+  try {
+    const accessToken: string = yield select(authSelectors.getAccessToken);
+    const user: User = yield select(authSelectors.getUser);
+    const newPlaylist = action.payload;
+
+    const headers = { Authorization: `Bearer ${accessToken}` , "Content-Type": 'application/json'}
+
+    const request = () =>
+      axios.post<any>(`https://api.spotify.com/v1/users/${user.userId}/playlists`, newPlaylist, {headers});
+    yield call(request);
+
+    yield put(createPlaylistSuccess());
+  } catch (error: any) {
+    yield put(createPlaylistFailed({ message: error.message }));
   }
 }
 
 export default function* playlistsSaga() {
   yield takeEvery(getPlaylists.type, getPlaylistsFromCurrentUser);
+  yield takeEvery(createPlaylist.type, createNewPlaylist);
 }

@@ -1,4 +1,7 @@
 import { FC, ReactElement, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { createPlaylist } from "../../containers/playlists/slice";
+import { RootState } from "../../store/store";
 
 // Define props interface
 interface PlaylistAddFormProps {}
@@ -9,18 +12,22 @@ const PlaylistAddForm: FC<PlaylistAddFormProps> = ({}): ReactElement => {
   const [isPublic, setIsPublic] = useState(true);
   const [isCollaborative, setIsCollaborative] = useState(false);
 
+  const dispatch = useDispatch();
+  const { creationStatus, creationError } = useSelector(
+    (state: RootState) => state.playlists
+  );
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Here you can handle the form submission logic, for example, sending the data to a backend server
-    console.log("Playlist Name:", playlistName);
-    console.log("Description:", description);
-    console.log("Public:", isPublic);
-    console.log("Collaborative:", isCollaborative);
-    // Reset form fields after submission
-    setPlaylistName("");
-    setDescription("");
-    setIsPublic(true);
-    setIsCollaborative(false);
+
+    dispatch(
+      createPlaylist({
+        name: playlistName,
+        description: description,
+        public: isPublic,
+        collaborative: isCollaborative,
+      })
+    );
   };
 
   return (
@@ -86,6 +93,7 @@ const PlaylistAddForm: FC<PlaylistAddFormProps> = ({}): ReactElement => {
             Create
           </button>
         </div>
+        <div>{creationStatus}</div>
       </form>
     </div>
   );
