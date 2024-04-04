@@ -1,10 +1,15 @@
 import React, { FC, ReactElement, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import SearchField from "./SearchField";
 import SearchResults from "./SearchResults";
 
-import { getTracks } from "../../containers/tracks/slice";
+import { Track, getTracks } from "../../containers/tracks/slice";
+import {
+  Playlist,
+  addToSelectedPlaylist,
+} from "../../containers/playlists/slice";
+import { RootState } from "../../store/store";
 
 const Search: FC = (): ReactElement => {
   const [search, setSearch] = useState("");
@@ -12,12 +17,24 @@ const Search: FC = (): ReactElement => {
 
   const dispatch = useDispatch();
 
+  const { currentPlaylist } = useSelector(
+    (state: RootState) => state.playlists
+  );
+
   function handleSearchChange(e: React.SetStateAction<string>) {
     setSearch(e);
   }
 
   function handleSearchButton() {
     dispatch(getTracks(search));
+  }
+
+  function handleAddToPlaylist(track: Track) {
+    currentPlaylist
+      ? dispatch(
+          addToSelectedPlaylist({ track: track, playlist: currentPlaylist })
+        )
+      : console.log("No selected playlist");
   }
 
   return (
@@ -30,7 +47,7 @@ const Search: FC = (): ReactElement => {
         buttonHandler={handleSearchButton}
       />
       <div style={{ display: isHovered ? "block" : "none" }}>
-        <SearchResults/>
+        <SearchResults handler={handleAddToPlaylist} />
       </div>
     </div>
   );

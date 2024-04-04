@@ -1,5 +1,6 @@
 import { PayloadAction, createAction, createSlice } from "@reduxjs/toolkit";
 import { ErrorPayload, RequestStatus } from "../../types/requests";
+import { Track } from "../tracks/slice";
 
 export const getPlaylists = createAction("playlists/getPlaylists");
 export const getPlaylistsSuccess = createAction<PlaylistList>(
@@ -17,6 +18,17 @@ export const createPlaylistSuccess = createAction(
 );
 export const createPlaylistFailed = createAction<ErrorPayload>(
   "playlists/createPlaylistFailed"
+);
+
+export const addToSelectedPlaylist = createAction<{
+  track: Track;
+  playlist: Playlist;
+}>("playlists/addToSelectedPlaylist");
+export const addToSelectedPlaylistSuccess = createAction(
+  "playlists/addToSelectedPlaylistSuccess"
+);
+export const addToSelectedPlaylistFailed = createAction<ErrorPayload>(
+  "playlists/addToSelectedPlaylistFailed"
 );
 
 export interface NewPlaylist {
@@ -42,17 +54,25 @@ export interface PlaylistsState {
   error?: string;
   creationStatus: RequestStatus;
   creationError?: string;
+  addStatus: RequestStatus;
+  addError?: string;
+  currentPlaylist?: Playlist;
 }
 
 const initialState: PlaylistsState = {
   status: RequestStatus.IDLE,
   creationStatus: RequestStatus.IDLE,
+  addStatus: RequestStatus.IDLE,
 };
 
 const playlistsSlice = createSlice({
   name: "playlists",
   initialState,
-  reducers: {},
+  reducers: {
+    setCurrentPlaylist(state, action: PayloadAction<Playlist>) {
+      state.currentPlaylist = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getPlaylists, (state) => {
@@ -62,7 +82,7 @@ const playlistsSlice = createSlice({
         getPlaylistsSuccess,
         (state, action: PayloadAction<PlaylistList>) => {
           state.status = RequestStatus.SUCCESS;
-          state.list = action.payload
+          state.list = action.payload;
         }
       )
       .addCase(
@@ -84,10 +104,23 @@ const playlistsSlice = createSlice({
           state.creationStatus = RequestStatus.ERROR;
           state.creationError = action.payload.message;
         }
+      )
+      .addCase(addToSelectedPlaylist, (state) => {
+        state.addStatus = RequestStatus.PENDING;
+      })
+      .addCase(addToSelectedPlaylistSuccess, (state) => {
+        state.addStatus = RequestStatus.SUCCESS;
+      })
+      .addCase(
+        addToSelectedPlaylistFailed,
+        (state, action: PayloadAction<ErrorPayload>) => {
+          state.addStatus = RequestStatus.ERROR;
+          state.addError = action.payload.message;
+        }
       );
   },
 });
 
-export const {} = playlistsSlice.actions;
+export const { setCurrentPlaylist } = playlistsSlice.actions;
 
 export default playlistsSlice.reducer;

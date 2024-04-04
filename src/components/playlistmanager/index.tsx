@@ -1,25 +1,21 @@
 import { FC, ReactElement, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
-import { getPlaylists } from "../../containers/playlists/slice";
+import { getPlaylists, setCurrentPlaylist } from "../../containers/playlists/slice";
 import PlaylistSelect from "./PlaylistSelect";
 import { Playlist } from "../../containers/playlists/slice";
 import { getTracksFromPlaylist } from "../../containers/tracks/slice";
 import PlaylistTracks from "./PlaylistTracks";
 
 const PlaylistManager: FC = (): ReactElement => {
-  const [selectedPlaylist, setSelectedPlaylist] = useState<
-    Playlist | undefined
-  >();
-
   const dispatch = useDispatch();
 
-  const { list, status, error } = useSelector(
+  const { list, status, error, currentPlaylist } = useSelector(
     (state: RootState) => state.playlists
   );
 
   function selectPlaylistHandler(playlist: Playlist) {
-    setSelectedPlaylist(playlist);
+    dispatch(setCurrentPlaylist(playlist));
     dispatch(getTracksFromPlaylist(playlist.id));
   }
 
@@ -54,7 +50,7 @@ const PlaylistManager: FC = (): ReactElement => {
           )}
         </div>
       </div>
-      <PlaylistTracks playlist={selectedPlaylist} />
+      <PlaylistTracks playlist={currentPlaylist} />
     </div>
   );
 };

@@ -29,6 +29,7 @@ export interface Track {
   id: string;
   track: Track | undefined;
   artists: Array<Artist>;
+  uri: string;
 }
 
 export interface TrackList {

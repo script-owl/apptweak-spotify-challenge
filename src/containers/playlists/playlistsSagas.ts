@@ -8,9 +8,12 @@ import {
   createPlaylist,
   createPlaylistFailed,
   createPlaylistSuccess,
+  addToSelectedPlaylist,
+  Playlist,
 } from "./slice";
 import { authSelectors } from "../auth/selectors";
 import { User } from "../auth/slice";
+import { Track } from "../tracks/slice";
 
 function* getPlaylistsFromCurrentUser() {
   try {
@@ -38,10 +41,42 @@ function* createNewPlaylist(action: ReturnType<typeof createPlaylist>) {
     const user: User = yield select(authSelectors.getUser);
     const newPlaylist = action.payload;
 
-    const headers = { Authorization: `Bearer ${accessToken}` , "Content-Type": 'application/json'}
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    };
 
     const request = () =>
-      axios.post<any>(`https://api.spotify.com/v1/users/${user.userId}/playlists`, newPlaylist, {headers});
+      axios.post<any>(
+        `https://api.spotify.com/v1/users/${user.userId}/playlists`,
+        newPlaylist,
+        { headers }
+      );
+    yield call(request);
+
+    yield put(createPlaylistSuccess());
+  } catch (error: any) {
+    yield put(createPlaylistFailed({ message: error.message }));
+  }
+}
+
+function* addToPlaylist(action: ReturnType<typeof addToSelectedPlaylist>) {
+  try {
+    const accessToken: string = yield select(authSelectors.getAccessToken);
+    const track: Track = action.payload.track;
+    const playlist: Playlist = action.payload.playlist;
+
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    };
+
+    const request = () =>
+      axios.post<any>(
+        `https://api.spotify.com/v1/playlists/${playlist.id}/tracks`,
+        { uris: [track.uri] },
+        { headers }
+      );
     yield call(request);
 
     yield put(createPlaylistSuccess());
@@ -53,4 +88,5 @@ function* createNewPlaylist(action: ReturnType<typeof createPlaylist>) {
 export default function* playlistsSaga() {
   yield takeEvery(getPlaylists.type, getPlaylistsFromCurrentUser);
   yield takeEvery(createPlaylist.type, createNewPlaylist);
+  yield takeEvery(addToSelectedPlaylist.type, addToPlaylist);
 }

@@ -2,8 +2,13 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { FC, ReactElement } from "react";
 import TrackView from "./TrackView";
+import { Track } from "../../containers/tracks/slice";
 
-const SearchResults: FC = (): ReactElement => {
+interface Props {
+  handler: (track: Track) => void;
+}
+
+const SearchResults: FC<Props> = ({ handler }: Props): ReactElement => {
   const {
     searchTrackList: list,
     status,
@@ -21,7 +26,7 @@ const SearchResults: FC = (): ReactElement => {
           <div>Loading tracks...</div>
         ) : list ? (
           list.tracks.map((item) => (
-            <TrackView key={item.id} track={item}></TrackView>
+            <TrackView key={item.id} track={item} handler={handler}></TrackView>
           ))
         ) : (
           <div className="border rounded bg-blue-300 p-1 px-2">
