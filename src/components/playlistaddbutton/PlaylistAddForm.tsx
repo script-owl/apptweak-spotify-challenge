@@ -1,21 +1,17 @@
 import { FC, ReactElement, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/store";
-import { createPlaylist } from "../../containers/playlists/actions";
+import { useDispatch } from "react-redux";
+import {
+  createPlaylist,
+  getPlaylists,
+} from "../../containers/playlists/actions";
 
-// Define props interface
-interface PlaylistAddFormProps {}
-
-const PlaylistAddForm: FC<PlaylistAddFormProps> = ({}): ReactElement => {
+const PlaylistAddForm: FC = (): ReactElement => {
   const [playlistName, setPlaylistName] = useState("");
   const [description, setDescription] = useState("");
   const [isPublic, setIsPublic] = useState(true);
   const [isCollaborative, setIsCollaborative] = useState(false);
 
   const dispatch = useDispatch();
-  const { creationStatus, creationError } = useSelector(
-    (state: RootState) => state.playlists
-  );
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -28,6 +24,7 @@ const PlaylistAddForm: FC<PlaylistAddFormProps> = ({}): ReactElement => {
         collaborative: isCollaborative,
       })
     );
+    dispatch(getPlaylists());
   };
 
   return (
@@ -93,7 +90,6 @@ const PlaylistAddForm: FC<PlaylistAddFormProps> = ({}): ReactElement => {
             Create
           </button>
         </div>
-        <div>{creationStatus}</div>
       </form>
     </div>
   );

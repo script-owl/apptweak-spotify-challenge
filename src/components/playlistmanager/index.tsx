@@ -1,4 +1,4 @@
-import { FC, ReactElement, useState } from "react";
+import { FC, ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import PlaylistSelect from "./PlaylistSelect";
@@ -10,7 +10,7 @@ import { getTracksFromPlaylist } from "../../containers/tracks/actions";
 const PlaylistManager: FC = (): ReactElement => {
   const dispatch = useDispatch();
 
-  const { list, status, error, currentPlaylist } = useSelector(
+  const { list, currentPlaylist } = useSelector(
     (state: RootState) => state.playlists
   );
 
@@ -19,8 +19,7 @@ const PlaylistManager: FC = (): ReactElement => {
     dispatch(getTracksFromPlaylist(playlist.id));
   }
 
-  function click() {
-    if (list) console.log(list.items);
+  function handleLoadPlaylists() {
     dispatch(getPlaylists());
   }
 
@@ -29,7 +28,7 @@ const PlaylistManager: FC = (): ReactElement => {
       <div className="space-y-4">
         <button
           className="flex items-center rounded-lg border border-slate-700 bg-blue-500 hover:bg-blue-700 text-white font-bold p-3 ml-auto" // Add flex and items-center classes to align icon and text
-          onClick={() => click()}
+          onClick={() => handleLoadPlaylists()}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
