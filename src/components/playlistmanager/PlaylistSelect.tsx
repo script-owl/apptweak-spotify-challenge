@@ -12,13 +12,14 @@ const PlaylistSelect: FC<Props> = ({
   handler,
 }: Props): ReactElement => {
   return (
-    <div>
+    <div className="flex flex-col"> {/* Container with flex column direction */}
       {playlists.items.map((playlist) => (
-        <PlaylistView
-          key={playlist.id}
-          playlist={playlist}
-          handler={handler}
-        ></PlaylistView>
+        <div key={playlist.id} className="mb-1 ml-auto"> {/* Wrapped in a div with margin bottom */}
+          <PlaylistView
+            playlist={playlist}
+            handler={handler}
+          />
+        </div>
       ))}
     </div>
   );

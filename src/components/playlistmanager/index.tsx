@@ -28,7 +28,7 @@ const PlaylistManager: FC = (): ReactElement => {
     <div className="flex space-x-6">
       <div className="space-y-4">
         <button
-          className="rounded-lg border border-slate-700 bg-blue-500 hover:bg-blue-700 text-white font-bold p-3 flex items-center" // Add flex and items-center classes to align icon and text
+          className="flex items-center rounded-lg border border-slate-700 bg-blue-500 hover:bg-blue-700 text-white font-bold p-3 ml-auto" // Add flex and items-center classes to align icon and text
           onClick={() => click()}
         >
           <svg

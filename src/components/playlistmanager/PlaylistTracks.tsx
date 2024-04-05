@@ -41,28 +41,30 @@ const PlaylistTracks: FC<Props> = ({ playlist }: Props): ReactElement => {
       </div>
       <hr className="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700"></hr>
 
-      {status == "error" ? (
-        <div>Error loading tracks.</div>
-      ) : status == "pending" ? (
-        <div>Loading tracks ...</div>
-      ) : selectedPlaylistTrackList ? (
-        selectedPlaylistTrackList.tracks.map((item) =>
-          item.track ? (
-            <TrackView
-              key={item.track.name}
-              track={item.track}
-              buttonInfo={{
-                handler: removeFromPlaylistHandler,
-                text: "Remove from playlist",
-              }}
-            ></TrackView>
-          ) : (
-            <div>N/A</div>
+      <div className="overflow-auto h-96">
+        {status == "error" ? (
+          <div>Error loading tracks.</div>
+        ) : status == "pending" ? (
+          <div>Loading tracks ...</div>
+        ) : selectedPlaylistTrackList ? (
+          selectedPlaylistTrackList.tracks.map((item) =>
+            item.track ? (
+              <TrackView
+                key={item.track.name}
+                track={item.track}
+                buttonInfo={{
+                  handler: removeFromPlaylistHandler,
+                  text: "Remove from playlist",
+                }}
+              ></TrackView>
+            ) : (
+              <div>N/A</div>
+            )
           )
-        )
-      ) : (
-        <div>Could not load playlist items</div>
-      )}
+        ) : (
+          <div>Could not load playlist items</div>
+        )}
+      </div>
     </div>
   );
 };
