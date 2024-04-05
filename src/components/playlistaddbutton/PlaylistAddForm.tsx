@@ -1,7 +1,7 @@
 import { FC, ReactElement, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createPlaylist } from "../../containers/playlists/slice";
 import { RootState } from "../../store/store";
+import { createPlaylist } from "../../containers/playlists/actions";
 
 // Define props interface
 interface PlaylistAddFormProps {}

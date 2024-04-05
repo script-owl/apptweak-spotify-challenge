@@ -9,11 +9,12 @@ import {
   createPlaylistFailed,
   createPlaylistSuccess,
   addToSelectedPlaylist,
-  Playlist,
-} from "./slice";
+  removeFromSelectedPlaylist,
+} from "./actions";
 import { authSelectors } from "../auth/selectors";
 import { User } from "../auth/slice";
 import { Track } from "../tracks/slice";
+import { Playlist } from "./slice";
 
 function* getPlaylistsFromCurrentUser() {
   try {
@@ -85,8 +86,38 @@ function* addToPlaylist(action: ReturnType<typeof addToSelectedPlaylist>) {
   }
 }
 
+function* removeFromPlaylist(action: ReturnType<typeof addToSelectedPlaylist>) {
+  try {
+    const accessToken: string = yield select(authSelectors.getAccessToken);
+    const track: Track = action.payload.track;
+    const playlist: Playlist = action.payload.playlist;
+
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    };
+
+    const request = () =>
+      axios.delete<any>(
+        `https://api.spotify.com/v1/playlists/${playlist.id}/tracks`,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+          data: {
+            tracks: [{ uri: track.uri }],
+          },
+        }
+      );
+    yield call(request);
+
+    yield put(createPlaylistSuccess());
+  } catch (error: any) {
+    yield put(createPlaylistFailed({ message: error.message }));
+  }
+}
+
 export default function* playlistsSaga() {
   yield takeEvery(getPlaylists.type, getPlaylistsFromCurrentUser);
   yield takeEvery(createPlaylist.type, createNewPlaylist);
   yield takeEvery(addToSelectedPlaylist.type, addToPlaylist);
+  yield takeEvery(removeFromSelectedPlaylist.type, removeFromPlaylist);
 }

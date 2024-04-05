@@ -1,8 +1,10 @@
 import { FC, ReactElement } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { Playlist } from "../../containers/playlists/slice";
 import TrackView from "../search/TrackView";
+import { Track } from "../../containers/tracks/slice";
+import { removeFromSelectedPlaylist } from "../../containers/playlists/actions";
 
 interface Props {
   playlist: Playlist | undefined;
@@ -12,6 +14,21 @@ const PlaylistTracks: FC<Props> = ({ playlist }: Props): ReactElement => {
   const { selectedPlaylistTrackList, status, error } = useSelector(
     (state: RootState) => state.tracks
   );
+  const { currentPlaylist, removeStatus, removeError } = useSelector(
+    (state: RootState) => state.playlists
+  );
+
+  const dispatch = useDispatch();
+  function removeFromPlaylistHandler(track: Track) {
+    currentPlaylist
+      ? dispatch(
+          removeFromSelectedPlaylist({
+            track: track,
+            playlist: currentPlaylist,
+          })
+        )
+      : console.log("No currently selected playlist");
+  }
 
   return (
     <div>
@@ -31,7 +48,14 @@ const PlaylistTracks: FC<Props> = ({ playlist }: Props): ReactElement => {
       ) : selectedPlaylistTrackList ? (
         selectedPlaylistTrackList.tracks.map((item) =>
           item.track ? (
-            <TrackView key={item.track.name} track={item.track}></TrackView>
+            <TrackView
+              key={item.track.name}
+              track={item.track}
+              buttonInfo={{
+                handler: removeFromPlaylistHandler,
+                text: "Remove from playlist",
+              }}
+            ></TrackView>
           ) : (
             <div>N/A</div>
           )

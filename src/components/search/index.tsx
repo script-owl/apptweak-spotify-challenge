@@ -4,12 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import SearchField from "./SearchField";
 import SearchResults from "./SearchResults";
 
-import { Track, getTracks } from "../../containers/tracks/slice";
-import {
-  Playlist,
-  addToSelectedPlaylist,
-} from "../../containers/playlists/slice";
+import { Track } from "../../containers/tracks/slice";
 import { RootState } from "../../store/store";
+import { addToSelectedPlaylist } from "../../containers/playlists/actions";
+import { getTracks } from "../../containers/tracks/actions";
 
 const Search: FC = (): ReactElement => {
   const [search, setSearch] = useState("");

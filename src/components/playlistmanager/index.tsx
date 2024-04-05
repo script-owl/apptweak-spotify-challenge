@@ -1,11 +1,11 @@
 import { FC, ReactElement, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
-import { getPlaylists, setCurrentPlaylist } from "../../containers/playlists/slice";
 import PlaylistSelect from "./PlaylistSelect";
-import { Playlist } from "../../containers/playlists/slice";
-import { getTracksFromPlaylist } from "../../containers/tracks/slice";
+import { Playlist, setCurrentPlaylist } from "../../containers/playlists/slice";
 import PlaylistTracks from "./PlaylistTracks";
+import { getPlaylists } from "../../containers/playlists/actions";
+import { getTracksFromPlaylist } from "../../containers/tracks/actions";
 
 const PlaylistManager: FC = (): ReactElement => {
   const dispatch = useDispatch();

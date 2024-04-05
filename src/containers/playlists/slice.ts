@@ -1,35 +1,19 @@
-import { PayloadAction, createAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { ErrorPayload, RequestStatus } from "../../types/requests";
-import { Track } from "../tracks/slice";
-
-export const getPlaylists = createAction("playlists/getPlaylists");
-export const getPlaylistsSuccess = createAction<PlaylistList>(
-  "playlists/getPlaylistsSuccess"
-);
-export const getPlaylistsFailed = createAction<ErrorPayload>(
-  "playlists/getPlaylistsFailed"
-);
-
-export const createPlaylist = createAction<NewPlaylist>(
-  "playlists/createPlaylist"
-);
-export const createPlaylistSuccess = createAction(
-  "playlists/createPlaylistSuccess"
-);
-export const createPlaylistFailed = createAction<ErrorPayload>(
-  "playlists/createPlaylistFailed"
-);
-
-export const addToSelectedPlaylist = createAction<{
-  track: Track;
-  playlist: Playlist;
-}>("playlists/addToSelectedPlaylist");
-export const addToSelectedPlaylistSuccess = createAction(
-  "playlists/addToSelectedPlaylistSuccess"
-);
-export const addToSelectedPlaylistFailed = createAction<ErrorPayload>(
-  "playlists/addToSelectedPlaylistFailed"
-);
+import {
+  getPlaylists,
+  getPlaylistsSuccess,
+  getPlaylistsFailed,
+  createPlaylist,
+  createPlaylistSuccess,
+  createPlaylistFailed,
+  addToSelectedPlaylist,
+  addToSelectedPlaylistSuccess,
+  addToSelectedPlaylistFailed,
+  removeFromSelectedPlaylist,
+  removeFromSelectedPlaylistSuccess,
+  removeFromSelectedPlaylistFailed,
+} from "./actions";
 
 export interface NewPlaylist {
   name: string;
@@ -49,6 +33,7 @@ export interface PlaylistList {
 }
 
 export interface PlaylistsState {
+  currentPlaylist?: Playlist;
   list?: PlaylistList;
   status: RequestStatus;
   error?: string;
@@ -56,13 +41,15 @@ export interface PlaylistsState {
   creationError?: string;
   addStatus: RequestStatus;
   addError?: string;
-  currentPlaylist?: Playlist;
+  removeStatus: RequestStatus;
+  removeError?: string;
 }
 
 const initialState: PlaylistsState = {
   status: RequestStatus.IDLE,
   creationStatus: RequestStatus.IDLE,
   addStatus: RequestStatus.IDLE,
+  removeStatus: RequestStatus.IDLE,
 };
 
 const playlistsSlice = createSlice({
@@ -116,6 +103,19 @@ const playlistsSlice = createSlice({
         (state, action: PayloadAction<ErrorPayload>) => {
           state.addStatus = RequestStatus.ERROR;
           state.addError = action.payload.message;
+        }
+      )
+      .addCase(removeFromSelectedPlaylist, (state) => {
+        state.removeStatus = RequestStatus.PENDING;
+      })
+      .addCase(removeFromSelectedPlaylistSuccess, (state) => {
+        state.removeStatus = RequestStatus.SUCCESS;
+      })
+      .addCase(
+        removeFromSelectedPlaylistFailed,
+        (state, action: PayloadAction<ErrorPayload>) => {
+          state.removeStatus = RequestStatus.ERROR;
+          state.removeError = action.payload.message;
         }
       );
   },

@@ -26,7 +26,11 @@ const SearchResults: FC<Props> = ({ handler }: Props): ReactElement => {
           <div>Loading tracks...</div>
         ) : list ? (
           list.tracks.map((item) => (
-            <TrackView key={item.id} track={item} handler={handler}></TrackView>
+            <TrackView
+              key={item.id}
+              track={item}
+              buttonInfo={{ handler: handler, text: "Add to playlist" }}
+            ></TrackView>
           ))
         ) : (
           <div className="border rounded bg-blue-300 p-1 px-2">

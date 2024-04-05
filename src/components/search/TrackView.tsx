@@ -3,10 +3,13 @@ import { Track } from "../../containers/tracks/slice";
 
 interface Props {
   track: Track;
-  handler?: (track: Track) => void | undefined;
+  buttonInfo?: {
+    handler: (track: Track) => void;
+    text: string;
+  };
 }
 
-const TrackView: FC<Props> = ({ track, handler }: Props): ReactElement => {
+const TrackView: FC<Props> = ({ track, buttonInfo }: Props): ReactElement => {
   return (
     <div className="flex justify-between border rounded border-slate-800 bg-indigo-200 px-1 mb-1">
       <div>{track.name}</div>
@@ -20,12 +23,12 @@ const TrackView: FC<Props> = ({ track, handler }: Props): ReactElement => {
         </ul>
       </div>
       <div className="flex items-center focus-within:shadow-lg overflow-hidden">
-        {handler ? (
+        {buttonInfo ? (
           <button
-            onClick={() => handler(track)}
+            onClick={() => buttonInfo.handler(track)}
             className="rounded-lg border border-slate-700 bg-blue-500 hover:bg-blue-700 text-white font-bold p-3"
           >
-            Add to current playlist
+            {buttonInfo.text}
           </button>
         ) : (
           <></>

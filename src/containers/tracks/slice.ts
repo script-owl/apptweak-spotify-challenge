@@ -1,23 +1,13 @@
 import { PayloadAction, createAction, createSlice } from "@reduxjs/toolkit";
 import { ErrorPayload, RequestStatus } from "../../types/requests";
-
-export const getTracks = createAction<string>("tracks/getTracks");
-export const getTracksSuccess = createAction<TrackList>(
-  "tracks/getTracksSuccess"
-);
-export const getTracksFailed = createAction<ErrorPayload>(
-  "tracks/getTracksFailed"
-);
-
-export const getTracksFromPlaylist = createAction<string>(
-  "tracks/getTracksFromPlaylist"
-);
-export const getTracksFromPlaylistSuccess = createAction<TrackList>(
-  "tracks/getTracksFromPlaylistSuccess"
-);
-export const getTracksFromPlaylistFailed = createAction<ErrorPayload>(
-  "tracks/getTracksFromPlaylistFailed"
-);
+import {
+  getTracks,
+  getTracksSuccess,
+  getTracksFailed,
+  getTracksFromPlaylist,
+  getTracksFromPlaylistSuccess,
+  getTracksFromPlaylistFailed,
+} from "./actions";
 
 export interface Artist {
   id: string;

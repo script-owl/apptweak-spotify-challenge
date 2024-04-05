@@ -5,12 +5,12 @@ import { call, put, select, takeEvery } from "redux-saga/effects";
 import { authSelectors } from "../auth/selectors";
 import {
   getTracks,
-  getTracksFailed,
   getTracksSuccess,
+  getTracksFailed,
   getTracksFromPlaylist,
   getTracksFromPlaylistSuccess,
   getTracksFromPlaylistFailed,
-} from "./slice";
+} from "./actions";
 
 function* getTracksByQuerySaga(action: ReturnType<typeof getTracks>) {
   try {
