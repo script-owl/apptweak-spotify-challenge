@@ -17,9 +17,9 @@ const SearchResults: FC<Props> = ({ handler }: Props): ReactElement => {
 
   return (
     <div className="absolute bg-white border border-gray-300 rounded shadow-lg border rounded border-slate-800 bg-gray-100 p-1 overflow-auto min-h-0 max-h-80">
-      {status == "error" ? (
-        <div className="border rounded bg-red-300 p-1 px-2">Invalid search</div>
-      ) : status == "pending" ? (
+      {status === "error" ? (
+        <div className="border rounded bg-red-300 p-1 px-2">{error}</div>
+      ) : status === "pending" ? (
         <div>Loading tracks...</div>
       ) : list ? (
         list.tracks.map((item) => (

@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useEffect } from "react";
+import { FC, ReactNode, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { authSelectors } from "./selectors";

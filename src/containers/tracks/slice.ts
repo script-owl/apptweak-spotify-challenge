@@ -1,4 +1,4 @@
-import { PayloadAction, createAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { ErrorPayload, RequestStatus } from "../../types/requests";
 import {
   getTracks,

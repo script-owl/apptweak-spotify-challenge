@@ -10,6 +10,10 @@ import {
   createPlaylistSuccess,
   addToSelectedPlaylist,
   removeFromSelectedPlaylist,
+  removeFromSelectedPlaylistSuccess,
+  removeFromSelectedPlaylistFailed,
+  addToSelectedPlaylistSuccess,
+  addToSelectedPlaylistFailed,
 } from "./actions";
 import { authSelectors } from "../auth/selectors";
 import { User } from "../auth/slice";
@@ -80,9 +84,9 @@ function* addToPlaylist(action: ReturnType<typeof addToSelectedPlaylist>) {
       );
     yield call(request);
 
-    yield put(createPlaylistSuccess());
+    yield put(addToSelectedPlaylistSuccess());
   } catch (error: any) {
-    yield put(createPlaylistFailed({ message: error.message }));
+    yield put(addToSelectedPlaylistFailed({ message: error.message }));
   }
 }
 
@@ -91,12 +95,7 @@ function* removeFromPlaylist(action: ReturnType<typeof addToSelectedPlaylist>) {
     const accessToken: string = yield select(authSelectors.getAccessToken);
     const track: Track = action.payload.track;
     const playlist: Playlist = action.payload.playlist;
-
-    const headers = {
-      Authorization: `Bearer ${accessToken}`,
-      "Content-Type": "application/json",
-    };
-
+    
     const request = () =>
       axios.delete<any>(
         `https://api.spotify.com/v1/playlists/${playlist.id}/tracks`,
@@ -109,9 +108,9 @@ function* removeFromPlaylist(action: ReturnType<typeof addToSelectedPlaylist>) {
       );
     yield call(request);
 
-    yield put(createPlaylistSuccess());
+    yield put(removeFromSelectedPlaylistSuccess());
   } catch (error: any) {
-    yield put(createPlaylistFailed({ message: error.message }));
+    yield put(removeFromSelectedPlaylistFailed({ message: error.message }));
   }
 }
 
