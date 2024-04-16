@@ -19,6 +19,7 @@ import { authSelectors } from "../auth/selectors";
 import { User } from "../auth/slice";
 import { Track } from "../tracks/slice";
 import { Playlist } from "./slice";
+import { getTracksFromPlaylist } from "../tracks/actions";
 
 function* getPlaylistsFromCurrentUser() {
   try {
@@ -58,6 +59,7 @@ function* createNewPlaylist(action: ReturnType<typeof createPlaylist>) {
         { headers }
       );
     yield call(request);
+    yield put(getPlaylists());
 
     yield put(createPlaylistSuccess());
   } catch (error: any) {
@@ -83,6 +85,7 @@ function* addToPlaylist(action: ReturnType<typeof addToSelectedPlaylist>) {
         { headers }
       );
     yield call(request);
+    if (playlist) yield put(getTracksFromPlaylist(playlist.id));
 
     yield put(addToSelectedPlaylistSuccess());
   } catch (error: any) {
@@ -95,7 +98,7 @@ function* removeFromPlaylist(action: ReturnType<typeof addToSelectedPlaylist>) {
     const accessToken: string = yield select(authSelectors.getAccessToken);
     const track: Track = action.payload.track;
     const playlist: Playlist = action.payload.playlist;
-    
+
     const request = () =>
       axios.delete<any>(
         `https://api.spotify.com/v1/playlists/${playlist.id}/tracks`,
@@ -107,6 +110,7 @@ function* removeFromPlaylist(action: ReturnType<typeof addToSelectedPlaylist>) {
         }
       );
     yield call(request);
+    if (playlist) yield put(getTracksFromPlaylist(playlist.id));
 
     yield put(removeFromSelectedPlaylistSuccess());
   } catch (error: any) {

@@ -31,10 +31,13 @@ export interface TracksState {
   selectedPlaylistTrackList?: TrackList;
   status: RequestStatus;
   error?: string;
+  getTracksStatus: RequestStatus;
+  getTracksError?: string;
 }
 
 const initialState: TracksState = {
   status: RequestStatus.IDLE,
+  getTracksStatus: RequestStatus.IDLE,
 };
 
 const tracksSlice = createSlice({
@@ -58,20 +61,20 @@ const tracksSlice = createSlice({
         }
       )
       .addCase(getTracksFromPlaylist, (state) => {
-        state.status = RequestStatus.PENDING;
+        state.getTracksStatus = RequestStatus.PENDING;
       })
       .addCase(
         getTracksFromPlaylistSuccess,
         (state, action: PayloadAction<TrackList>) => {
-          state.status = RequestStatus.SUCCESS;
+          state.getTracksStatus = RequestStatus.SUCCESS;
           state.selectedPlaylistTrackList = action.payload;
         }
       )
       .addCase(
         getTracksFromPlaylistFailed,
         (state, action: PayloadAction<ErrorPayload>) => {
-          state.status = RequestStatus.ERROR;
-          state.error = action.payload.message;
+          state.getTracksStatus = RequestStatus.ERROR;
+          state.getTracksError = action.payload.message;
         }
       );
   },

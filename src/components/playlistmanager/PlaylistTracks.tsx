@@ -10,8 +10,11 @@ interface Props {
   handler: (track: Track) => void;
 }
 
-const PlaylistTracks: FC<Props> = ({ playlist, handler }: Props): ReactElement => {
-  const { selectedPlaylistTrackList, status } = useSelector(
+const PlaylistTracks: FC<Props> = ({
+  playlist,
+  handler,
+}: Props): ReactElement => {
+  const { selectedPlaylistTrackList, getTracksStatus } = useSelector(
     (state: RootState) => state.tracks
   );
 
@@ -27,9 +30,9 @@ const PlaylistTracks: FC<Props> = ({ playlist, handler }: Props): ReactElement =
       <hr className="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700"></hr>
 
       <div className="overflow-auto h-96">
-        {status === "error" ? (
+        {getTracksStatus === "error" ? (
           <div>Error loading tracks.</div>
-        ) : status === "pending" ? (
+        ) : getTracksStatus === "pending" ? (
           <div>Loading tracks ...</div>
         ) : selectedPlaylistTrackList ? (
           selectedPlaylistTrackList.tracks.map((item) =>

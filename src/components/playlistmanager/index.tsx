@@ -1,4 +1,4 @@
-import { FC, ReactElement } from "react";
+import { FC, ReactElement, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import PlaylistSelect from "./PlaylistSelect";
@@ -10,7 +10,6 @@ import {
 } from "../../containers/playlists/actions";
 import { getTracksFromPlaylist } from "../../containers/tracks/actions";
 import { Track } from "../../containers/tracks/slice";
-import LoadButton from "./LoadButton";
 
 const PlaylistManager: FC = (): ReactElement => {
   const dispatch = useDispatch();
@@ -24,13 +23,9 @@ const PlaylistManager: FC = (): ReactElement => {
     dispatch(getTracksFromPlaylist(playlist.id));
   }
 
-  function handleLoadPlaylists() {
+  useEffect(() => {
     dispatch(getPlaylists());
-  }
-
-  function handleLoadPlaylist() {
-    if (currentPlaylist) dispatch(getTracksFromPlaylist(currentPlaylist.id));
-  }
+  }, []);
 
   function handleRemoveFromPlaylist(track: Track) {
     currentPlaylist
@@ -46,8 +41,8 @@ const PlaylistManager: FC = (): ReactElement => {
   return (
     <div className="flex space-x-6">
       <div className="space-y-4">
-        <div>
-          <LoadButton handler={handleLoadPlaylists} text={"Load Playlists"} />
+        <div className="font-bold p-3 text-right">
+          <u>Playlists</u>
         </div>
         <div>
           {list ? (
@@ -59,7 +54,6 @@ const PlaylistManager: FC = (): ReactElement => {
       </div>
       <div className="border-l border-gray-400"></div>
       <div className="space-y-4">
-        <LoadButton handler={handleLoadPlaylist} text={"Load Tracks"} />
         <PlaylistTracks
           playlist={currentPlaylist}
           handler={handleRemoveFromPlaylist}
